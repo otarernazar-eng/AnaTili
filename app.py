@@ -255,12 +255,19 @@ else:
             for lit in literature:
                 with st.expander(f"📖 {lit.title} (Уровень: {lit.level})"):
                     st.markdown(lit.content)
+                    
+                    st.download_button(
+                        label="⬇️ Скачать текст (TXT)",
+                        data=f"{lit.title}\n\nУровень: {lit.level}\n\n{lit.content}",
+                        file_name=f"AnaTili_Literature_{lit.id}.txt",
+                        mime="text/plain"
+                    )
+                    
                     st.divider()
                     st.subheader("Интерактивный сценарий (Interactive Scenario)")
                     user_answer = st.text_area("Ваш ответ / Ваше мнение:", key=f"lit_{lit.id}")
                     if st.button("Отправить на проверку Ментору", key=f"btn_lit_{lit.id}"):
                         st.success("Ваш ответ сохранен и отправлен вашему Ментору для обсуждения на следующей сессии!")
-                        # Here you'd save it to the DB in a real scenario
         session.close()
         
     elif selected == "AI Buddy":

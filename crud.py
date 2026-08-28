@@ -87,13 +87,25 @@ def seed_initial_data(db: Session):
         
     # Check if literature exists
     if not db.query(Material).filter(Material.type == 'literature').first():
-        lit = Material(
-            type="literature",
-            title="Слова Назидания (Қара сөздер) - Слово Первое",
-            content="Хорошо я жил или плохо, а пройдено немало: в борьбе и ссорах, судах и спорах, страданиях и тревогах дошел до преклонных лет, выбившись из сил, пресытившись всем, обнаружил бренность и бесплодность своих деяний...\n\n**Интерактивный сценарий:** Если бы вы оказались на месте Абая, какому делу вы бы посвятили остаток своих дней?",
+        lit1 = Material(
+            type="literature", 
+            title="Абай Құнанбайұлы - Қара сөздері (Слова Назидания)", 
+            content="Величайшее философское произведение Абая, состоящее из 45 кратких притч и трактатов.\n\n🔗 **[Читать или скачать онлайн на Kitap.kz](https://kitap.kz/book/qara-sozder)**", 
+            level="B2"
+        )
+        lit2 = Material(
+            type="literature", 
+            title="Мұқағали Мақатаев - Өлеңдері (Стихи)", 
+            content="Сборник стихов выдающегося казахского поэта Мукагали Макатаева, чья поэзия отличается глубоким лиризмом.\n\n🔗 **[Читать онлайн на Kitap.kz](https://kitap.kz/book/olender-zhinagy-muqaghali-maqataev)**", 
             level="B1"
         )
-        db.add(lit)
+        lit3 = Material(
+            type="literature", 
+            title="Мұхтар Әуезов - Абай жолы (Путь Абая)", 
+            content="Эпопея, описывающая жизнь Абая Кунанбаева и казахского общества XIX века. Одно из главных произведений казахской литературы.\n\n🔗 **[Слушать аудиокнигу и читать на Adebiportal.kz](https://adebiportal.kz/kz/books/view/abai-zholy-1-tom__680)**", 
+            level="C1"
+        )
+        db.add_all([lit1, lit2, lit3])
     db.commit()
 
 def get_all_vocabulary(db: Session):
