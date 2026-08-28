@@ -312,8 +312,11 @@ else:
                         st.markdown(clean_result)
                         st.session_state.messages.append({"role": "assistant", "content": clean_result})
                     else:
-                        st.error(f"Ошибка API: {response.status_code}. Возможно, модель загружается или нужен Token.")
+                        st.error(f"Ошибка API: {response.status_code}. Возможно, модель перегружена.")
                         st.session_state.messages.append({"role": "assistant", "content": "Извините, сейчас сервер недоступен."})
+                except requests.exceptions.ConnectionError:
+                    st.error("Ошибка сети на сервере (DNS). Это временная проблема серверов Streamlit. Подождите пару минут и попробуйте снова!")
+                    st.session_state.messages.append({"role": "assistant", "content": "Ошибка подключения к сети. Пожалуйста, повторите запрос позже."})
                 except Exception as e:
                     st.error(f"Ошибка: {e}")
         
