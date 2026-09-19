@@ -355,8 +355,8 @@ else:
             with st.chat_message("assistant"):
                 import requests
                 
-                # Новый формат: обращаемся к Gemini 1.5 Flash
-                API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={hf_token}"
+                # Новый формат: обращаемся к актуальной модели Gemini 2.5 Flash
+                API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={hf_token}"
                 headers = {"Content-Type": "application/json"}
                 
                 # Формируем историю сообщений для Gemini
