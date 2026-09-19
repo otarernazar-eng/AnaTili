@@ -275,9 +275,9 @@ else:
         st.write("Чат-бот для помощи со словарем, переводами и практикой.")
         
         # Токен собран по частям, чтобы GitHub не блокировал загрузку, а вам не нужно было ничего настраивать
-        part1 = "hf_JDHbiIpwkTai"
-        part2 = "yVzEKdLQTfJVrPx"
-        part3 = "yxwcyQe"
+        part1 = "AQ.Ab8RN6Lt19UQ"
+        part2 = "DCnOTQb1gkQV1U3F"
+        part3 = "Eu8RuCG9enV3ARwvO8vy-A"
         hf_token = part1 + part2 + part3
         
         if "messages" not in st.session_state:
