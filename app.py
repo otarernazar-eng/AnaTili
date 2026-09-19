@@ -355,28 +355,41 @@ else:
             with st.chat_message("assistant"):
                 import requests
                 
-                API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
-                headers = {"Authorization": f"Bearer {hf_token}"} if hf_token else {}
+                # Новый формат: обращаемся к Gemini 1.5 Flash
+                API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={hf_token}"
+                headers = {"Content-Type": "application/json"}
+                
+                # Формируем историю сообщений для Gemini
+                contents = []
+                for msg in st.session_state.messages:
+                    # В Gemini роли называются "user" и "model" (а не assistant)
+                    role = "user" if msg["role"] == "user" else "model"
+                    contents.append({
+                        "role": role,
+                        "parts": [{"text": msg["content"]}]
+                    })
                 
                 payload = {
-                    "inputs": f"<s>[INST] {prompt} [/INST]",
-                    "parameters": {"max_new_tokens": 100}
+                    "contents": contents
                 }
                 
                 try:
                     response = requests.post(API_URL, headers=headers, json=payload)
                     if response.status_code == 200:
-                        result = response.json()[0]['generated_text']
-                        # Remove the prompt from the response
-                        clean_result = result.split("[/INST]")[-1].strip()
+                        result = response.json()
+                        try:
+                            clean_result = result['candidates'][0]['content']['parts'][0]['text']
+                        except (KeyError, IndexError):
+                            clean_result = "Извините, не смог сгенерировать ответ."
+                        
                         st.markdown(clean_result)
                         st.session_state.messages.append({"role": "assistant", "content": clean_result})
                     else:
-                        st.error(f"Ошибка API: {response.status_code}. Возможно, модель перегружена.")
+                        st.error(f"Ошибка API: {response.status_code}. {response.text}")
                         st.session_state.messages.append({"role": "assistant", "content": "Извините, сейчас сервер недоступен."})
                 except requests.exceptions.ConnectionError:
-                    st.error("Ошибка сети на сервере (DNS). Это временная проблема серверов Streamlit. Подождите пару минут и попробуйте снова!")
-                    st.session_state.messages.append({"role": "assistant", "content": "Ошибка подключения к сети. Пожалуйста, повторите запрос позже."})
+                    st.error("Ошибка сети. Попробуйте еще раз.")
+                    st.session_state.messages.append({"role": "assistant", "content": "Ошибка подключения к сети."})
                 except Exception as e:
                     st.error(f"Ошибка: {e}")
         
